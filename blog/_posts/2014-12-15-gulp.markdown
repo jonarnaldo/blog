@@ -1,0 +1,91 @@
+---
+layout: post
+title:  "Gulp"
+date:   2014-12-25 13:21:38
+categories: jekyll update
+---
+
+Gulp  I had a good chunk of time over the break to learn a few new tricks. One of them is utilizing automation to take away some of the pain of web development using a task runner/build process called Gulp. It uses Node.js and provides a plethora of services to help with production including concatenating files, compiling sass files into css, minifying code, injecting files into other files, running tests automatically, among other things. These services become increasingly useful as apps begin to grow, especially those using frameworks like Backbone or Angular. 
+
+ Gulp.js basically utilizes modules similar to Node.js which you can think of as specific tools that each do one thing. ‘Gulp-inject’ for example, can inject all script files in a specific folder into your index.html file. Combined with ‘Gulp-watch’, you can set up a task that will watch for changes to script files or even creation of script files and either re-inject or add them to your index.html. Sounds pretty cool, right? Let’s get started with an example. This example assumes you have developed a fair amount of apps and are familiar with Node.js.
+
+First, you’ll want to install gulp into your root directory:
+
+{% highlight ruby %}
+npm install gulp –save-dev
+{% endhighlight %}
+
+Hey, what’s that ‘—save-dev’ bit at the end? This will save gulp in a separate object in your package.json file which will look something like
+
+package.json:
+{% highlight ruby %}
+“devDependencies”: {
+ “gulp”: “^*.*.*",
+ }
+{% endhighlight %}
+
+Also install “gulp-inject” and “gulp-watch”
+
+{% highlight ruby %}
+npm install gulp-inject gulp-watch —save-dev
+{% endhighlight %}
+
+Now, we can start building out our gulp file. Create a file called ‘gulpfile.js’ in your project directory. You’ll want to first add gulp, then add the modules:
+
+{% highlight ruby %}
+var gulp = require(‘gulp’),
+    inject = require(‘gulp-inject’),
+    watch = require(‘gulp-watch’)
+{% endhighlight %}
+
+Next, you’ll want to set up your paths in an object for easy reference. Here’s an example of what that would look like:
+
+{% highlight ruby %}
+var paths = {
+ bower : “./client/bower_components/”,
+ index : “./client/index.html”,
+ client : “./client/”,
+ sass: “./client/sass/style.scss”,
+ core: “./client/app/core/**/*.js”,
+ app: “./client/app/app.js”
+}
+{% endhighlight %}
+
+Notice the ‘*’ and ‘’. The ‘*’ means any folder and ‘.js’ means any javascript file.
+
+Next is the actual meat of the file, which is setting up the tasks. Let’s set up a task to inject all javascript files in paths.core into the index.html file:
+
+{% highlight ruby %}
+gulp.task(‘core’, function () {
+ var core = gulp.src( paths.core, {read:false} );
+ var app = gulp.src(paths.app, {read:false});
+ var options = { read:false, name: ‘core’, ignorePath: ‘/client’ }; 
+ 
+ return gulp.src( paths.index)
+ .pipe(inject(core)
+ .pipe(gulp.dest(paths.client))
+})
+{% endhighlight %}
+
+Gulp tasks can be thought of as streams. At each ‘.pipe’, you perform a certain action then pass it on to the next ‘.pipe’ to perform some other useful task.
+
+setting up a watch task is similar:
+
+{% highlight ruby %}
+gulp.task(‘watch’, function() {
+ gulp.watch(‘./client/sass/*.scss’, [‘sass’]);
+});
+{% endhighlight %}
+
+{% highlight ruby %}
+gulp.task(‘default’, function() {
+ runSequence(‘core’, ‘sass’,’bower’,’watch’, ‘karma’, function () {
+ console.log(‘gulp success!’)
+ });
+});
+{% endhighlight %}
+
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help

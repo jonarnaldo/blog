@@ -1,0 +1,68 @@
+---
+layout: post
+title:  "Do the Shuffle"
+date:   2014-10-26 13:21:38
+categories: jekyll update
+---
+
+Do the Shuffle
+Shuffling an array is useful for randomizing an array. Let’s say you’re building a Blackjack game and you need a deck shuffled. You might do something like this:
+
+{% highlight ruby %}
+var shuffle = function (array) {
+  var length = array.length, i;
+  var result = [];
+  
+  while (length) {
+  // pick random index
+  var randomIndex = Math.floor(Math.random() * array.length);
+  //check index is in array
+    if (randomIndex in array) {
+      result.push(array[randomIndex]);
+      delete array[randomIndex];
+      length--;
+    }
+  }
+ return result;
+}
+{% endhighlight %}
+
+As you might have noticed, as the number of elements in the array decreases the number of indexes already chosen will increase. How do we pick only indexes that still exist, then? Another method would be to actually imagine the array to be composed of two subarrays — an array of numbers not yet chosen and another of already chosen indexes. It would look something like this:
+
+{% highlight ruby %}
+[5,2,3,4,6] // index range: 0-4, choose index 1
+[5,6,3,4] [2] // index range: 0-3, choose index 3
+[5,6,3] [4,2] // index range: 0-2, choose index 0
+
+[6,3] [5,4,2] // index range: 0-1, choose index 1
+
+[6] [3,5,4,2] // index range: 0, choose 0
+
+[][6,3,5,4,2] // all indexes shuffled
+{% endhighlight %}
+
+This shuffling can actually be done in place. The steps would go something like this:
+
+choose a random value in the array
+swap the random value with the last element
+decrease the range
+and here’s the code:
+
+{% highlight ruby %}
+var shuffle = function(array) {
+  var length = array.length
+  while(length) {
+    var randomIndex = Math.floor(Math.random() * length--);
+    // check if index is in array
+    if (randomIndex in array) {
+      var temp = array[length];
+      array[length] = array[randomIndex];
+      array[randomIndex] = temp;
+    }
+  }
+}
+{% endhighlight %}
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help

@@ -1,0 +1,40 @@
+---
+layout: post
+title:  "Angular Controllers, Factories, Services, and Providers"
+date:   2014-12-6 13:21:38
+categories: jekyll update
+---
+
+When first starting out in Angular.js it’s easy to start writing a majority of your logic in controllers. But your controller should really be delegating logic to a factory, service, or provider. But why? Generally, keeping data in controllers is an anti-pattern because they are instantiated when needed and removed when they are not. However, Angular allows data to persist through three methods: factories, services, and providers. Let’s dive in to some code to see how this a controller and factory pattern can be used:
+
+Here’s a controller:
+
+{% highlight ruby %}
+angular.module('myApp.getData',[])
+.controller('getDataController, function ($scope, getFree) {
+  angular.extend($scope, getData);
+  $scope.getFree();
+}
+{% endhighlight %}
+
+and here’s the factory:
+
+{% highlight ruby %}
+angular.module('myApp.services',[])
+.factory('getFree', function ($scope, $http) {
+  $scope.data = {};
+  var getData = function () {
+    // amazing stuff happening here...
+  };
+  // do more things...
+  return {
+    getData: getData
+  }
+});
+{% endhighlight %}
+
+And that all there is to it!
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help

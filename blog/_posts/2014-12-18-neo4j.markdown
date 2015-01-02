@@ -1,0 +1,50 @@
+---
+layout: post
+title:  "What I talk about when I talk about Neo4J"
+date:   2014-12-18 13:21:38
+categories: jekyll update
+---
+Neo4JCypher is a graph database and the language that Neo4J speaks is Cypher. It’s a very visual language that enables users to interact with the database and intuitively understand the relationships between nodes. In this post I’ll cover how to create a node, as well as find some nodes both by their properties and their relationships to other nodes.
+
+Create: Here’s how to create a node.
+
+{% highlight ruby %}
+{% endhighlight %}
+
+{% highlight ruby %}
+CREATE (n) RETURN n
+{% endhighlight %}
+If you want to get fancy you can pass some additional information:
+
+{% highlight ruby %}
+CREATE (n:SomeName { property: "someProperty"}) RETURN n
+{% endhighlight %}
+Find: What about finding a node?
+
+{% highlight ruby %}
+MATCH (someVar { property: "Some Property"} RETURN someVar.
+{% endhighlight %}
+Here’s an example of finding a cat named Mr.Squiggles:
+
+{% highlight ruby %}
+MATCH (squiggles {name: "Mr.Squiggles"}) RETURN squiggles
+{% endhighlight %}
+Query: How about finding all of Mr.Squiggles hangouts?
+{% highlight ruby %}
+MATCH (squiggles {name: "Mr.Squiggles"})-[:HANGOUTS]-(MrSquigglesPlaces) RETURN squiggles, MrSquigglesPlaces
+{% endhighlight %}
+Or, other cats that hangout around Mr.Squiggles places?
+{% highlight ruby %}
+(squiggles {name: "Mr.Squiggles"})-[:HANGOUTS]->(MrSquigglesPlaces)<-(cats) RETURN cats
+{% endhighlight %}
+One more thing — Since you’re probably just experimenting with Neo4J you probably want to delete the database every once in a while. Here’s how to do that:
+
+{% highlight ruby %}
+MATCH (n) DELETE n
+{% endhighlight %}
+Check out http://neo4j.com/developer/guide-cypher-basics/ for a more in-depth look at how to create more complex queries. 
+
+
+[jekyll]:      http://jekyllrb.com
+[jekyll-gh]:   https://github.com/jekyll/jekyll
+[jekyll-help]: https://github.com/jekyll/jekyll-help

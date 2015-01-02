@@ -1,0 +1,12 @@
+# Site settings
+title: Full Stack Engineer
+email: jonarnaldo@gmail.com
+description: > # this means to ignore newlines until "baseurl:"
+  Explorations into the vast wilderness of web development
+baseurl: "" # the subpath of your site, e.g. /blog/
+url: "http://www.jonarnaldo.com" # the base hostname & protocol for your site
+twitter_username: jonarnaldo
+github_username:  jonarnaldo
+
+# Build settings
+markdown: kramdown
